@@ -4,6 +4,7 @@ const pageSchema = new mongoose.Schema({
     histoireId: { type: mongoose.Schema.Types.ObjectId, ref: "Histoire", required: true },
     contenu: { type: String, required: true },
     isFin: { type: Boolean, default: false },
+    order: { type: Number }  // <-- optionnel mais recommandé
 });
 
 export default mongoose.model("Page", pageSchema);
