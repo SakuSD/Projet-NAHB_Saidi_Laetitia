@@ -6,6 +6,7 @@ import { db } from "./config/db.js"; // 👉 connexion MySQL
 
 import authRoutes from "./routes/authRoutes.js";
 import histoireRoutes from "./routes/histoireRoutes.js";
+import pagesRoutes from "./routes/pageRoutes.js";
 
 // Load .env
 dotenv.config();
@@ -49,6 +50,7 @@ app.get("/api/ping", (req, res) => {
 // ==== ROUTES ====
 app.use("/api/auth", authRoutes);
 app.use("/api/histoires", histoireRoutes);
+app.use("/api/pages", pagesRoutes);
 
 // ==== START SERVEUR ====
 const PORT = process.env.PORT || 5000;
