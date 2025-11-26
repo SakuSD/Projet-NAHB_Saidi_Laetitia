@@ -7,6 +7,8 @@ import { db } from "./config/db.js"; // 👉 connexion MySQL
 import authRoutes from "./routes/authRoutes.js";
 import histoireRoutes from "./routes/histoireRoutes.js";
 import pagesRoutes from "./routes/pageRoutes.js";
+import choixRoutes from "./routes/choixRoutes.js";
+import partieRoutes from "./routes/partieRoutes.js";
 
 // Load .env
 dotenv.config();
@@ -51,6 +53,8 @@ app.get("/api/ping", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/histoires", histoireRoutes);
 app.use("/api/pages", pagesRoutes);
+app.use("/api/parties", partieRoutes);
+app.use("/api/choix", choixRoutes);
 
 // ==== START SERVEUR ====
 const PORT = process.env.PORT || 5000;
