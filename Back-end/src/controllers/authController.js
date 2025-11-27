@@ -6,7 +6,6 @@ export const register = async (req, res) => {
     try {
         const { pseudo, email, motDePasse, role } = req.body;
 
-        // Vérifie si email existe
         const [rows] = await db.query(
             "SELECT * FROM utilisateurs WHERE email = ?",
             [email]
@@ -16,26 +15,19 @@ export const register = async (req, res) => {
             return res.status(400).json({ message: "Email déjà utilisé." });
         }
 
-        // Hash du mot de passe
         const hash = await bcrypt.hash(motDePasse, 10);
 
-        // Insertion en SQL
         const [result] = await db.query(
             "INSERT INTO utilisateurs (pseudo, email, motDePasse, role) VALUES (?, ?, ?, ?)",
             [pseudo, email, hash, role || "lecteur"]
         );
 
-        const newUserId = result.insertId;
-        req.session.userId = newUserId;
+        req.session.userId = result.insertId;
+        req.session.role = role || "lecteur";
 
         res.status(201).json({
             message: "Compte créé.",
-            user: {
-                id: newUserId,
-                pseudo,
-                email,
-                role: role || "lecteur"
-            }
+            user: { id: result.insertId, pseudo, email, role: role || "lecteur" }
         });
 
     } catch (err) {
@@ -53,9 +45,8 @@ export const login = async (req, res) => {
             [email]
         );
 
-        if (rows.length === 0) {
+        if (rows.length === 0)
             return res.status(400).json({ message: "Utilisateur introuvable." });
-        }
 
         const user = rows[0];
 
@@ -63,14 +54,11 @@ export const login = async (req, res) => {
         if (!match) return res.status(400).json({ message: "Mot de passe incorrect." });
 
         req.session.userId = user.id;
+        req.session.role = user.role; // 🔥 IMPORTANT !!!
 
         res.json({
             message: "Connecté.",
-            user: {
-                pseudo: user.pseudo,
-                email: user.email,
-                role: user.role
-            }
+            user: { pseudo: user.pseudo, email: user.email, role: user.role }
         });
 
     } catch (err) {
@@ -87,12 +75,11 @@ export const logout = (req, res) => {
 // INFOS UTILISATEUR CONNECTÉ
 export const me = async (req, res) => {
     try {
-        if (!req.session.userId) {
+        if (!req.session.userId)
             return res.status(401).json({ message: "Non connecté." });
-        }
 
         const [rows] = await db.query(
-            "SELECT id, pseudo, email, role FROM utilisateurs WHERE id = ?",
+            "SELECT id, pseudo, email, role, estBanni FROM utilisateurs WHERE id = ?",
             [req.session.userId]
         );
 

@@ -9,6 +9,7 @@ import histoireRoutes from "./routes/histoireRoutes.js";
 import pagesRoutes from "./routes/pageRoutes.js";
 import choixRoutes from "./routes/choixRoutes.js";
 import partieRoutes from "./routes/partieRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
 
 // Load .env
 dotenv.config();
@@ -55,6 +56,7 @@ app.use("/api/histoires", histoireRoutes);
 app.use("/api/pages", pagesRoutes);
 app.use("/api/parties", partieRoutes);
 app.use("/api/choix", choixRoutes);
+app.use("/api/admin", adminRoutes);
 
 // ==== START SERVEUR ====
 const PORT = process.env.PORT || 5000;
