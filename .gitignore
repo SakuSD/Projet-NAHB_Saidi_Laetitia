@@ -5,7 +5,7 @@ node_modules/
 .env
 
 # Logs
-npm-debug.log*
+npm-debug.log*git status
 yarn-debug.log*
 yarn-error.log*
 
